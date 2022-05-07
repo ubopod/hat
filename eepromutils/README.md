@@ -5,15 +5,34 @@ https://www.raspberrypi.org/forums/viewtopic.php?t=108134
 
 ## Usage
 
-1. Create tools with `make && sudo make install`
+1. Create tools 
+with `make && sudo make install`
 	Tools available:
 	* `eepmake`: Parses EEPROM text file and creates binary `.eep` file
 	* `eepdump`: Dumps a binary .eep file as human readable text (for debug)
 	* `eepflash`: Write or read .eep binary image to/from HAT EEPROM
 
-2. Edit `eeprom_setting.txt` to suit your specific HAT.
+2. Configure `boot/config.txt`
 
-3. Run `./eepmake eeprom_settings.txt eeprom.eep` to create the eep binary
+add this line `dtparam=i2c_vc=on` to `boot/config.txt` and reboot. After reboot confirm 
+
+'i2cdetect -y 0' 
+
+```
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: 50 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- --   
+```
+
+3. Edit `eeprom_setting.txt` to suit your specific HAT.
+
+4. Run `./eepmake eeprom_settings.txt eeprom.eep` to create the eep binary
 
 #### On the Raspberry Pi
 0. create tools with `make && sudo make install` (If you did the previous steps on your Pi, you don't need to do this).
@@ -21,6 +40,11 @@ https://www.raspberrypi.org/forums/viewtopic.php?t=108134
 	* Sometimes this requires a jumper on the board
 	* Sometimes this is a GPIO
 	* Check your schematics
+	* On Ubo pod the EEPROM write protect is connected to GPIO 16. To disable write protect, it must be pulled low:
+	```
+	raspi-gpio set 16 op
+	raspi-gpio set 16 dl
+	```
 2. Make sure you can talk to the EEPROM
 	* In the HAT specification, the HAT EEPROM is connected to pins that can be driven by I2C0.
 	  However, this is the same interface as used by the camera and displays, so use of it by the ARMs is discouraged.
