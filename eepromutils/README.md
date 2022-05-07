@@ -27,22 +27,25 @@ wget -c https://raw.githubusercontent.com/RobertCNelson/tools/master/pkgs/dtc.sh
 chmod +x dtc.sh
 ./dtc.sh
 ```
+
 then go to the following directory:
 
 ```
 cd hats/eepromutils/
 ```
+
 and run:
 
-```make && sudo make install```
+```
+make && sudo make install
+```
 
 This should make `eepdump`, `eepmake` executables.
 
 1. Configure `boot/config.txt`
 
-add this line `dtparam=i2c_vc=on` to `boot/config.txt` and reboot. After reboot 
+add this line `dtparam=i2c_vc=on` to `boot/config.txt` and reboot.  
 
-```
 
 2. Disable EEPROM write protection
 	* On Ubo pod the EEPROM write protect is connected to GPIO 16. To disable write protect, it must be pulled low:
@@ -57,8 +60,8 @@ add this line `dtparam=i2c_vc=on` to `boot/config.txt` and reboot. After reboot
 	* In the HAT specification, the HAT EEPROM is connected to pins that can be driven by I2C0.
 	After reboot, confirm if EEPROM chip is recognized on bus 0 and on address 0x50:
 
-	'i2cdetect -y 0' 
-
+	`i2cdetect -y 0`
+	
 	```
 	     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
 	00:                         -- -- -- -- -- -- -- -- 
